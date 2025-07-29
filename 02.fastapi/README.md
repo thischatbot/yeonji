@@ -56,3 +56,9 @@ uvicorn main:app --reload
 ```bash
 http://localhost:8000/docs
 ```
+
+## 🌟 다음 단계로
+
+- 실제 감정 분석 모델 연동(`Huggingface pipeline`)
+- LangChain memory나 DB에 저장하기
+- 이 API를 Streamlit 또는 프론트와 연동
