@@ -1,3 +1,4 @@
+import random
 import pandas as pd
 
 kakao_chat = [
@@ -46,5 +47,44 @@ kakao_chat = [
     ["연지", "2025-07-01 23:00", "이 개쓰레기야"]
 ]
 
-df = pd.DataFrame(kakao_chat, columns=["speaker", "timestamp", "text"])
+# 기존 대사에서 '연지' 발화 수집
+original_texts = [item[2] for item in kakao_chat if item[0] == "연지"]
+
+# 단어 단위 키워드 뽑기
+keywords = list(set(word for line in original_texts
+                    for word in line.replace("...", "").replace("?", "").split()
+                    if len(word) > 1))
+
+# 변형 템플릿 리스트
+variation_templates = [
+    "혹시 {}?",
+    "{} 말이라도 해줘",
+    "{} 너무한 거 아니야?",
+    "{} 왜 그래",
+    "정말 {}?",
+    "{} 나 너무 괴로워",
+    "{} 제발",
+    "너 진짜 {} 했잖아",
+    "내가 그렇게 {} 했는데",
+    "진심으로 {} 했던 건데",
+    "{} 하지 말지 그랬어",
+    "내가 뭘 그렇게 {} 했다고"
+]
+
+generated_data = []
+for i in range(1000):
+    speaker = "전남친" if i % 4 == 0 else "연지"
+    timestamp = f"2025-07-01 {10 + (i//60):02}:{i%60:02}"
+    if speaker == "전남친":
+        text = random.choice([
+            "알았어", "그만하자", "좀 쉬어", "나중에 얘기하자",
+            "피곤하다", "그냥 그렇게 됐어"
+        ])
+    else:
+        keyword = random.choice(keywords)
+        template = random.choice(variation_templates)
+        text = template.format(keyword)
+    generated_data.append([speaker, timestamp, text])
+
+df = pd.DataFrame(generated_data, columns=["speaker", "timestamp", "text"])
 df.to_csv("kakao_chat.csv", index=False)
