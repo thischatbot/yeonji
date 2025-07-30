@@ -21,9 +21,16 @@ df = df.drop(df[df["text"].str.contains("해요\\)")].index)
 df = df.drop(df[df["text"].str.contains("응답없음\\)")].index)
 df = df.drop(df[df["text"].str.contains("\\(보이스톡")].index)
 
+# 유사 문장 확인
+print(df["text"].duplicated().sum())
+
+# 유사 문장 제거
+df = df.drop_duplicates(subset=['text'], keep='first')
+
 # 라벨링 적용
 df["emotion"] = df["text"].apply(label_emotion)
 
 # 확인
 print(df["emotion"].value_counts())
 df.to_csv("labeled_kakao_chat.csv", index=False)
+
