@@ -55,6 +55,8 @@ keywords = list(set(word for line in original_texts
                     for word in line.replace("...", "").replace("?", "").split()
                     if len(word) > 1))
 
+print(keywords)
+
 # 변형 템플릿 리스트
 variation_templates = [
     "혹시 {}?",
@@ -67,8 +69,7 @@ variation_templates = [
     "너 진짜 {} 했잖아",
     "내가 그렇게 {} 했는데",
     "진심으로 {} 했던 건데",
-    "{} 하지 말지 그랬어",
-    "내가 뭘 그렇게 {} 했다고"
+    "{} 하지 말지 그랬어"
 ]
 
 generated_data = []
@@ -87,4 +88,5 @@ for i in range(1000):
     generated_data.append([speaker, timestamp, text])
 
 df = pd.DataFrame(generated_data, columns=["speaker", "timestamp", "text"])
+
 df.to_csv("kakao_chat.csv", index=False)
